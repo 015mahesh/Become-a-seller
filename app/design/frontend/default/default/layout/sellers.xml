@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="top.links">
+            <action method="addLink" translate="label title" module="sellers">
+                <label>V Sellers</label>
+                <url>sellers</url>
+                <title>V Sellers</title>
+                <prepare>true</prepare>
+            </action>
+        </reference>
+    </default>
+    <sellers_index_index>
+         <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/sellers/jquery-1.7.2.min.js</script>
+            </action>
+         </reference>
+        <reference name="content">
+            <block type="core/template" name="become_a_seller" template="sellers/become_a_seller.phtml" />
+        </reference>
+    </sellers_index_index>
+</layout>

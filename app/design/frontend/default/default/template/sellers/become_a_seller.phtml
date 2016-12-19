@@ -1,0 +1,120 @@
+<?php
+ $helper=Mage::helper('sellers');
+?>
+<div class="account-create">
+    <div class="page-title">
+        <h1><?php echo  $helper->__('Become a Seller') ?></h1>
+    </div>
+
+<form action="<?php echo $this->getUrl('sellers/index/become_a_partner') ?>" enctype="multipart/form-data" method="post" id="become-a-seller">
+    <div class="fieldset">
+        <h2 class="legend"><?php echo  $helper->__('Seller Information') ?></h2>
+
+        <ul class="form-list">
+            <li class="fields">
+                <div class="seller">
+                    <div class="field">
+                        <label for="name" class="required"><em>*</em><?php echo  $helper->__('Seller Name') ?></label>
+                    <div class="input-box">
+                    <input id="name" name="name" value="" title="Name" maxlength="255" class="input-text required-entry" type="text">
+                    </div>
+                </div>
+            </li>
+             <li class="fields">
+                <div class="seller">
+                    <div class="field">
+                        <label for="email" class="required"><em>*</em><?php echo  $helper->__('Email') ?></label>
+                    <div class="input-box">
+                    <input id="email" name="email" value="" title="Email" maxlength="255" class="input-text validate-email required-entry" type="text">
+                    </div>
+                </div>
+            </li>
+
+            <li class="fields">
+                <div class="seller">
+                    <div class="field">
+                        <label for="country" class="required"><em>*</em><?php echo  $helper->__('Country') ?></label>
+                    <div class="input-box">
+                    <?php
+                    $countryList = Mage::getResourceModel('directory/country_collection')
+                                   ->loadData()
+                                   ->toOptionArray(false);
+                    ?>
+                    <select id="country" name="country" onchange="getstate(this.value);">
+                        <?php foreach ($countryList as $country) { ?>
+                            <option value="<?php echo $country['value']; ?>"><?php echo $country['label']; ?></option>
+                        <?php } ?>
+                    </select>
+                    </div>
+                </div>
+            </li>
+
+            <li class="fields">
+                <div class="seller">
+                    <div class="field">
+                        <label for="state" class="required"><em>*</em><?php echo  $helper->__('State') ?></label>
+                    <div class="input-box" id='statediv'>
+                    <input id="state" name="state" value="" title="State" maxlength="255" class="input-text required-entry" type="text">
+                    </div>
+                </div>
+            </li>
+
+             <li class="fields">
+                <div class="seller">
+                    <div class="field">
+                        <label for="zip" class="required"><em>*</em><?php echo  $helper->__('Zip') ?></label>
+                    <div class="input-box">
+                    <input id="zip" name="zip" value="" title="Zip" maxlength="255" class="input-text validate-zip-international required-entry" type="text">
+                    </div>
+                </div>
+            </li>
+
+            <li class="fields">
+                <div class="seller">
+                    <div class="field">
+                        <label for="category" class="required"><em>*</em><?php echo  $helper->__('Category') ?></label>
+                    <div class="input-box">
+                        <select style="min-height: 200px;" id="category" name="category[]" multiple="multiple">
+                        <?php
+                        $categories = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')
+                                      ->addIsActiveFilter()
+                                      ->addAttributeToFilter('entity_id', array('neq'=>2))
+                                      ->load();
+                        foreach($categories as $category):
+                        ?>
+                            <option value="<?php echo $category->getId(); ?>"><?php echo $category->getName(); ?></option>
+                        <?php
+                        endforeach;
+                        ?>
+                        </select>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+
+        <div class="buttons-set">
+            <p class="required">* <?php echo  $helper->__('Required Fields') ?></p>
+            <button type="submit" title="Submit" class="button"><span><span><?php echo  $helper->__('Submit') ?></span></span></button>
+        </div>
+
+    </div>
+</form>
+<script type="text/javascript">
+        var j = jQuery.noConflict();
+        var dataForm = new VarienForm('become-a-seller', true);
+
+        function getstate(countryValue) {
+            var reloadurl = '<?php echo $this->getUrl('sellers/index/state'); ?>' + 'country/' + countryValue;
+            j.ajax({
+            url: reloadurl, 
+            method: 'get',
+            success: function (data) {
+                j('#statediv').html(data);
+            }
+            });
+        }
+
+    </script>
+</div>
+       
